@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# auto-fixes whitespace in staged .scad files before each commit,
+# then re-stages the fixed files so the fix is included in the commit.
+set -euo pipefail
+
+while IFS= read -r -d '' file; do
+  ./scripts/fix-scad.sh "$file"
+  git add "$file"
+done < <(git diff --cached --name-only --diff-filter=ACM -z -- '*.scad')

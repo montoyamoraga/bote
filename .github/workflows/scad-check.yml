@@ -1,0 +1,31 @@
+name: check scad
+
+on:
+  push:
+    paths:
+      - "**/*.scad"
+      - "scripts/**"
+      - "terceros/**"
+      - ".gitmodules"
+  pull_request:
+    paths:
+      - "**/*.scad"
+      - "scripts/**"
+      - "terceros/**"
+      - ".gitmodules"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/lint-scad.sh
+
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - run: sudo apt-get update && sudo apt-get install -y openscad
+      - run: ./scripts/check-scad-syntax.sh
